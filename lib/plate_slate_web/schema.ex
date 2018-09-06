@@ -22,13 +22,13 @@ defmodule PlateSlateWeb.Schema do
   input_object :menu_item_filter do
 
     @desc "Matching a name"
-    field :name, :string
+    field :name,        :string
 
     @desc "Matching a category name"
-    field :category, :string
+    field :category,    :string
 
     @desc "Matching a tag"
-    field :tag, :string
+    field :tag,         :string
 
     @desc "Priced above a value"
     field :priced_above, :float
@@ -36,12 +36,35 @@ defmodule PlateSlateWeb.Schema do
     @desc "Priced below a value"
     field :priced_below, :float
 
+    @desc "Added to the menu before this date"
+    field :added_before, :date
+
+    @desc "Added to the menu after this date"
+    field :added_after,  :date
+
   end
 
   object :menu_item do
-    field :id, :id
-    field :name, :string
+    field :id,          :id
+    field :name,        :string
     field :description, :string
+    field :added_on,    :date
+  end
+
+  scalar :date do
+      # converts a value comfrom user into Elixir term
+      parse fn input ->
+          with %Absinthe.Blueprint.Input.String{value: value} <- input,
+            {:ok, date} <- Date.from_iso8601(value) do
+                {:ok, date}
+          else
+            _ -> :error
+        end
+      end
+      # converts an Elixir term back into value via JSON
+      serialize fn date ->
+          Date.to_iso8601(date)
+      end
   end
 
 end
