@@ -1,5 +1,6 @@
 defmodule PlateSlateWeb.Schema.MenuTypes do
-  use Absinthe.Schema.Notation
+  use Absinthe.Schema.Notation # only with unions
+  # use Absinthe.Schema
   alias PlateSlateWeb.Resolvers
 
   @desc "Filtering options for the menu item list"
@@ -29,6 +30,7 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
   end
 
   object :menu_item do
+    interfaces          [:search_result]
     field :id,          :id
     field :name,        :string
     field :description, :string
@@ -36,6 +38,7 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
   end
 
   object :category do
+    interfaces          [:search_result]
     field :name,        :string
     field :description, :string
     field :items, list_of(:menu_item) do
@@ -43,8 +46,9 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
     end
   end
 
-  union :search_result do
-    types [:menu_item, :category]
+  interface :search_result do
+    # types [:menu_item, :category]
+    field :name, :string
 
     resolve_type fn
       %PlateSlate.Menu.Item{}, _ ->
