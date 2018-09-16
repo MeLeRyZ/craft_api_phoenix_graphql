@@ -34,6 +34,7 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
     field :id,          :id
     field :name,        :string
     field :description, :string
+    field :price,       :decimal # new, handmade type
     field :added_on,    :date
   end
 
@@ -58,6 +59,16 @@ defmodule PlateSlateWeb.Schema.MenuTypes do
       _, _ ->
         nil
       end
+  end
+
+  # like admin-panel
+  # Input object fields can only be valid input types,
+  # which excludes unions, interfaces, and objects.
+  input_object :menu_item_input do
+    field :name,        non_null(:string)
+    field :description, :string
+    field :price,       non_null(:decimal)
+    field :category_id, non_null(:id)
   end
 
 end
