@@ -25,10 +25,13 @@ defmodule PlateSlate.Menu.Item do
   end
 
   @doc false
+  # wow, changeset is here
   def changeset(%Item{} = item, attrs) do
     item
     |> cast(attrs, [:name, :description, :price, :added_on])
     |> validate_required([:name, :price])
     |> foreign_key_constraint(:category)
+    |> unique_constraint(:name)
   end
+
 end
