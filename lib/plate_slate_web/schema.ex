@@ -56,4 +56,10 @@ defmodule PlateSlateWeb.Schema do
     serialize &to_string/1
   end
 
+  @desc "An error encounter trying to persist input"
+  object :input_error do
+    field :key,     non_null(:string)
+    field :message, non_null(:string)
+  end
+
 end
