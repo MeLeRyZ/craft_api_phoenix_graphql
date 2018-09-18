@@ -51,6 +51,7 @@ defmodule PlateSlate.Schema.Mutation.CreateMenuTest do
     }
   end
 
+
   test "creating a menu item with an existing name fails", %{category_id: category_id} do
     menu_item = %{
       "name" => "Reuben",
@@ -58,6 +59,7 @@ defmodule PlateSlate.Schema.Mutation.CreateMenuTest do
       "price" => "5.75",
       "categoryId" => category_id,
     }
+
     conn = build_conn()
     conn = post conn, "/api",
       query: @query,
@@ -69,6 +71,7 @@ defmodule PlateSlate.Schema.Mutation.CreateMenuTest do
         %{
           "locations" => [%{"column" => 0, "line" => 2}],
           "message" => "Could not create the item",
+          "details" => %{"name" => ["has already been taken"]},
           "path" => ["createMenuItem"]
         }
       ]

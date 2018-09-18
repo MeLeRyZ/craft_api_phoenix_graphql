@@ -18,11 +18,20 @@ defmodule PlateSlateWeb.Resolvers.Menu do
 
   def create_item(_, %{input: params}, _) do
     case Menu.create_item(params) do
-      {:error, _} ->
-        {:error, "Could not create the item"}
-      {:ok, _} = success ->
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create the item",
+          details: error_details(changeset),
+      }
+      success ->
         success
     end
+  end
+  # connected with logic
+  defp error_details(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn {msg, _} -> msg  end)
   end
 
   def create_item(attrs \\ %{}) do
